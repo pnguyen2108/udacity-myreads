@@ -22,6 +22,8 @@ export const Search = () => {
             setEmptySearch(true)
 
             return
+        } else{
+            setEmptySearch(false)
         }
 
         if (searchValue.length > 0 && searchValue !== prevSearchInput) {
@@ -62,7 +64,7 @@ export const Search = () => {
                         <h3>Please input something</h3> : ''}
                     {books &&
                         books.map((item: IBook, index: number) => (
-                            <Book book={item} isReloadAfterChanged={false} key={index}/>
+                            <Book book={item} isEmitAfterChanged={false} key={index}/>
                         ))}
                 </ol>
             </div>

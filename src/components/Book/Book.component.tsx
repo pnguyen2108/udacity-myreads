@@ -6,7 +6,8 @@ import {update} from "../../api/BooksAPI";
 
 export interface BookProps {
     book: IBook;
-    isReloadAfterChanged?: boolean
+    isEmitAfterChanged?: boolean
+    emitValue?: (bookId: string,currentShelf : string,newShelf: string) => void
 }
 
 export const Book = ({...props}: BookProps) => {
@@ -15,10 +16,8 @@ export const Book = ({...props}: BookProps) => {
     const onSelectShelf = (shelf: string) => {
         update(book, shelf).then(res => {
             if (res) {
-
-
-                if (props.isReloadAfterChanged){
-                    window.location.reload()
+                if (props.isEmitAfterChanged  ){
+                    props.emitValue!(book.id,book.shelf,shelf);
                 } else {
                     setBook(_cloneDeep({
                         ...book, shelf: shelf

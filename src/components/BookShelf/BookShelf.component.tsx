@@ -5,10 +5,13 @@ import {Book} from "../Book/Book.component";
 
 export interface BookShelfProps {
     books: IBook[];
-    bookShelfType: string;
+    bookShelfType?: string;
+    emitValueHome:(bookId: string,newShelf:string,currentShelf : string) => void
 }
 
 export const BookShelf = ({...props}: BookShelfProps) => {
+    const getReturnValue = (bookId: string,currentShelf: string,newShelf : string) => props.emitValueHome(bookId,currentShelf,newShelf)
+
     return (
         <div className="bookshelf">
             <h2 className="bookshelf-title">
@@ -17,7 +20,7 @@ export const BookShelf = ({...props}: BookShelfProps) => {
             <div className="bookshelf-books">
                 <ol className="books-grid">
                     {props.books.map((item: any, index: number) => (
-                        <Book book={item} isReloadAfterChanged={true} key={index}/>
+                        <Book book={item} isEmitAfterChanged={true} emitValue={getReturnValue} key={index}/>
                     ))}
                 </ol>
             </div>
