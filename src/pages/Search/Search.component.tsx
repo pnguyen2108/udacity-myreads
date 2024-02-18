@@ -7,10 +7,21 @@ import {IBook} from "../../models/book.model";
 export const Search = () => {
     const [books, setBooks] = useState<IBook[]>([]);
     const [prevSearchInput, setPrevSearchInput] = useState("");
+    const [emptySearch,setEmptySearch] = useState(false)
 
     const onChangeInput = _debounce((searchValue: string) => {
         if (searchValue.length > 0 && searchValue !== prevSearchInput) {
-            search(searchValue, 100).then((books: IBook[]) => {
+            search(searchValue, 100).catch(err => {
+                console.log(err)
+            }).then((books: any) => {
+
+                if (books.error) {
+                    setEmptySearch(true)
+                    return;
+                } else {
+                    setEmptySearch(false)
+                }
+
                 setBooks(() => books);
             });
 
@@ -34,7 +45,8 @@ export const Search = () => {
             </div>
             <div className="search-books-results">
                 <ol className="books-grid">
-                    {books &&
+                    {emptySearch && <h3 >No result found </h3>}
+                    { books &&
                         books.map((item: IBook, index: number) => (
                             <Book book={item} isReloadAfterChanged={false} key={index}/>
                         ))}
