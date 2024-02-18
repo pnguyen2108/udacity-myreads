@@ -15,12 +15,20 @@ export const Home = () => {
             ))
     }, []);
 
-    const updateBookShevles = (bookId: string, currentShelf: string, newShelf: string) => {
-        const currBookList = bookList;
+    const updateBookShelves = (bookId: string, currentShelf: string, newShelf: string) => {
+        let currBookList = bookList;
 
         const bookIndex = currBookList[currentShelf].findIndex((book: IBook) => book.id === bookId)
 
-        currBookList[newShelf].push(currBookList[currentShelf][bookIndex])
+        currBookList[currentShelf][bookIndex].shelf = newShelf;
+
+        if(bookIndex === -1) {
+            return
+        }
+
+        if (newShelf !== 'none' ) {
+            currBookList[newShelf].push(currBookList[currentShelf][bookIndex])
+        }
 
         currBookList[currentShelf].splice(bookIndex, 1)
 
@@ -35,7 +43,6 @@ export const Home = () => {
                     <h1> MyReads</h1>
                 </div>
                 <div className="list-books-content">
-
                     <div>{
                         bookList &&
                         Object.keys(bookList).map((type: string, index: number) =>
@@ -43,7 +50,7 @@ export const Home = () => {
                                 key={index}
                                 bookShelfType={type}
                                 books={bookList[type]}
-                                emitValueHome={updateBookShevles}
+                                emitValueHome={updateBookShelves}
                             />)}</div>
                 </div>
                 <div className="open-search">
